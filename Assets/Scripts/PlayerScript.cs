@@ -28,6 +28,8 @@ public class PlayerScript : MonoBehaviour
     private bool isGrounded;        // 地面設置判定
     private bool gameClear = false; // ゲームクリアーしたら操作を無効にする
 
+    private float old_x = 0; // 進めていないとき（壁にぶつかっているとき）
+
     int move = 0;
 
     
@@ -46,6 +48,7 @@ public class PlayerScript : MonoBehaviour
         toggleGroup = GameObject.FindWithTag("ToggleParent").GetComponent<ToggleGroup>();
     }
 
+    // 操作系
     void Update()
     {
         // ボタンクリック時は処理をしない
@@ -72,13 +75,21 @@ public class PlayerScript : MonoBehaviour
     }
 
 
-    // 
+    // 移動など
     void FixedUpdate()
     {
         //左右に移動させない　main_cameraを動かさない
         if (!gameClear)
         {
+            // 壁にぶつかったら死ぬ
+            if (old_x == transform.position.x)
+            {
+                lifeScript.GameOver();
+            }
+
             playerMove();
+
+            old_x = transform.position.x;
 
             //現在のカメラの位置から8低くした位置を下回った時
             if (gameObject.transform.position.y < Camera.main.transform.position.y - 8)
@@ -107,11 +118,15 @@ public class PlayerScript : MonoBehaviour
         rigidbody_2d.velocity = new Vector2(speed, rigidbody_2d.velocity.y);
         anim.SetBool("Dash", true);
 
-        //Vector3 cameraPos = Camera.main.transform.position;
-        //cameraPos.x = transform.position.x + 4;
-        //Camera.main.transform.position = cameraPos;
+        Vector3 cameraPos = Camera.main.transform.position;
+        cameraPos.x = transform.position.x + 4;
+        Camera.main.transform.position = cameraPos;
     }
 
+    /// <summary>
+    /// Collision接触時
+    /// </summary>
+    /// <param name="col"></param>
     void OnCollisionEnter2D(Collision2D col)
     {
         //Enemyとぶつかった時にコルーチンを実行
@@ -150,7 +165,10 @@ public class PlayerScript : MonoBehaviour
         gameObject.layer = LayerMask.NameToLayer("Player");
     }
 
-
+    /// <summary>
+    /// Trigger2D接触時
+    /// </summary>
+    /// <param name="col"></param>
     void OnTriggerEnter2D(Collider2D col)
     {
         //タグがClearZoneであるTriggerにぶつかったら
@@ -161,6 +179,9 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// タイトルに移動
+    /// </summary>
     void CallTitle()
     {
         //タイトル画面へ
@@ -181,7 +202,7 @@ public class PlayerScript : MonoBehaviour
                 Input.mousePosition.z);
         }
 
-        // 話したとき
+        // 離したとき
         if (Input.GetMouseButtonUp(0))
         {
             // フリック開始位置を取得
@@ -249,12 +270,7 @@ public class PlayerScript : MonoBehaviour
 
                 break;
             case "up":
-                if (isGrounded)
-                {
-                    anim.SetTrigger("Jump");
-                    isGrounded = false;
-                    rigidbody_2d.AddForce(Vector2.up * jump_power);
-                }
+                Jump();
                 break;
             case "down":
 
@@ -266,7 +282,18 @@ public class PlayerScript : MonoBehaviour
                 skillScript.useSkill(toggleGroup.ActiveToggles().First().name);
                 break;
         }
+    }
 
-
+    /// <summary>
+    /// ジャンプ
+    /// </summary>
+    public void Jump()
+    {
+        if (isGrounded)
+        {
+            anim.SetTrigger("Jump");
+            isGrounded = false;
+            rigidbody_2d.AddForce(Vector2.up * jump_power);
+        }
     }
 }

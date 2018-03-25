@@ -14,6 +14,8 @@ public class CreaterScript : MonoBehaviour {
 
     private void Start()
     {
+        if (drop == null) { return; }
+
         List<string> strs = new List<string>();
         for(int i = 1; i < 10; i++)
         {

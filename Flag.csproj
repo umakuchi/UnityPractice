@@ -291,7 +291,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\GameManager.cs" />
     <Compile Include="Assets\Scripts\BulletScript.cs" />
     <Compile Include="Assets\Scripts\CallMainScript.cs" />
     <Compile Include="Assets\Scripts\CallSceneScript.cs" />
@@ -300,6 +299,7 @@
     <Compile Include="Assets\Scripts\CreaterScript.cs" />
     <Compile Include="Assets\Scripts\EnemyScript.cs" />
     <Compile Include="Assets\Scripts\ExplosionScript.cs" />
+    <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\GeneralFuncController.cs" />
     <Compile Include="Assets\Scripts\GeneraterScript.cs" />
     <Compile Include="Assets\Scripts\ItemScript.cs" />
@@ -307,7 +307,6 @@
     <Compile Include="Assets\Scripts\Objects\MapObject.cs" />
     <Compile Include="Assets\Scripts\PlayerScript.cs" />
     <Compile Include="Assets\Scripts\SaveData.cs" />
-    <Compile Include="Assets\Scripts\SerializeUtils.cs" />
     <Compile Include="Assets\Scripts\ShotScript.cs" />
     <Compile Include="Assets\Scripts\SkillScript.cs" />
     <Compile Include="Assets\Scripts\ZoomScript.cs" />
